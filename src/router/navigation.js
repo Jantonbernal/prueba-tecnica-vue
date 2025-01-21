@@ -1,6 +1,5 @@
-
 import { storeToRefs } from "pinia";
-import router from '@/router/index'
+import router from '@/router/index';
 import { useAccessStore } from "@/stores/access";
 import { ref } from "vue";
 
@@ -11,18 +10,20 @@ router.beforeResolve((to, from, next) => {
 
     const verifyAccess = ref(JSON.parse(localStorage.getItem("accessToken")) || accessToken.value);
 
-    // Si hacia la ruta que voy requiere autenticación
-    if (to.matched.some((record) => record.meta.requiresAuth)) {
-        // Verifico si está autenticado
+    // Condición para evitar acceso al login si ya está autenticado
+    if (to.name === "Login" && !to.meta.requiresAuth && verifyAccess.value) {
+        // Redirigir a la página principal u otra ruta protegida
+        next({ name: "Home" }); // Cambia "Home" por la ruta protegida deseada
+    } else if (to.matched.some((record) => record.meta.requiresAuth)) {
+        // Si la ruta requiere autenticación
         if (verifyAccess.value) {
-            next();
+            next(); // Permitir navegación
         } else {
-            // sino esta autenticado que lo envíe a la ventana de login
-            next({
-                name: "Login",
-            });
+            // Redirigir a la ventana de login si no está autenticado
+            next({ name: "Login" });
         }
     } else {
+        // Permitir navegación si la ruta no requiere autenticación
         next();
     }
 });
