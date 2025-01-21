@@ -29,9 +29,9 @@ const { access } = storeToRefs(useAccess);
 const useHeight = useHeightStore();
 const { height } = storeToRefs(useHeight);
 
-const {
-    dataLogout, logout, loadingLogout, errorLogout,
-} = useAuth();
+// const {
+//     dataLogout, logout, loadingLogout, errorLogout,
+// } = useAuth();
 
 onMounted(() => {
     authUserAuthenticate.value = JSON.parse(access?.value);
@@ -53,16 +53,25 @@ const navigateTo = (path) => {
     }
 }
 
-watch(dataLogout, (received) => {
+const logout = () => {
     access.value = null
-
     $toast.open({
-        message: JSON.parse(access.value).message,
+        message: "Cerro sesión correctamente",
         type: 'success',
     });
-
     router.push({ name: 'Login' })
-})
+}
+
+// watch(dataLogout, (received) => {
+//     access.value = null
+
+//     $toast.open({
+//         message: "Cerro sesión correctamente",
+//         type: 'success',
+//     });
+
+//     router.push({ name: 'Login' })
+// })
 </script>
 <template>
     <v-navigation-drawer v-if="height < 500" v-model="drawer" rounded="lg" floating app :elevation="15" width="290"
@@ -72,7 +81,7 @@ watch(dataLogout, (received) => {
             <h3 class="text-center mb-3">
                 {{ authUserAuthenticate?.data?.email }}
             </h3>
-            <v-btn block color="error">
+            <v-btn block color="error" @click="logout">
                 Cerrar Sesión
             </v-btn>
         </div>

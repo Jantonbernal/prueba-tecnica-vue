@@ -2,10 +2,15 @@
 import { onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
 import { useMenuStore } from "@/stores/menu.js";
 import { useHeightStore } from "@/stores/height.js";
 import { useAccessStore } from "@/stores/access.js";
+
+// Inicializar toast para notificaciones
+const $toast = useToast();
 
 const router = useRouter();
 
@@ -32,6 +37,16 @@ const authUserAuthenticate = ref(null);
 const navigateTo = (route) => {
     router.push({ name: route });
 };
+
+const logout = () => {
+    access.value = null
+    $toast.open({
+        message: "Cerro sesión correctamente",
+        type: 'success',
+    });
+    router.push({ name: 'Login' })
+}
+
 </script>
 
 <template>
@@ -45,7 +60,7 @@ const navigateTo = (route) => {
             <!-- Sección superior con usuario y botón de cerrar sesión -->
             <div class="user-info">
                 <h3 class="user-name">{{ authUserAuthenticate?.data?.email }}</h3>
-                <v-btn color="error" class="logout-button">Cerrar Sesión</v-btn>
+                <v-btn color="error" class="logout-button" @click.prevent="logout">Cerrar Sesión</v-btn>
             </div>
 
             <!-- Navegación inferior -->
