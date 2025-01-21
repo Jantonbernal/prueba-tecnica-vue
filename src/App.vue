@@ -1,16 +1,16 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div id="app" class="app">
+  <v-app id="app" class="app">
     <!-- Navigation -->
     <router-view v-slot="{ Component }">
       <transition name="fade">
         <component :is="Component" />
       </transition>
     </router-view>
-  </div>
+  </v-app>
 </template>
 
 <style>

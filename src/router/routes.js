@@ -1,50 +1,25 @@
 const NotFound = () => import('@/views/Error.vue');
-const Example1 = () => import('@/components/Example1.vue');
-const Product = () => import('@/components/Product.vue');
-const ProductDetail = () => import('@/components/ProductDetail.vue');
+const Login = () => import('@/components/Auth/Login.vue');
+const Dashboard = () => import('@/components/Dashboard/Index.vue');
 
 const routes = [
     {
         path: '/',
+        name: 'Login',
+        component: Login,
+        meta: {
+            requiresAuth: false
+        }
+    },
+    {
+        path: '/dashboard',
         name: 'Home',
-        component: Example1,
+        component: Dashboard,
         meta: {
-            requiresAuth: false
+            requiresAuth: true
         },
-        // children: [
-        //     {
-        //         path: '/dashboard/usuario/store',
-        //         name: 'usuario.crear',
-        //         component: UserCreate,
-        //         meta: {
-        //             requiresAuth: true,
-        //         },
-        //     },
-        //     {
-        //         path: '/dashboard/usuario/edit/:id',
-        //         name: 'usuario.editar',
-        //         component: UserEdit,
-        //         meta: {
-        //             requiresAuth: true,
-        //         },
-        //     },
-        // ]
-    },
-    {
-        path: '/producto',
-        name: 'product',
-        component: Product,
-        meta: {
-            requiresAuth: false
-        }
-    },
-    {
-        path: '/producto-detalle/:id',
-        name: 'ProductDetail',
-        component: ProductDetail,
-        meta: {
-            requiresAuth: false
-        }
+        children: [
+        ]
     },
     {
         path: '/:pathMatch(.*)*',
