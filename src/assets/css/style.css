@@ -1,0 +1,41 @@
+#app {
+    font-size: 12px !important;
+}
+
+.general {
+    font-family: 'Segoe UI';
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 0) and (min-device-width: 1025px) {
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-button:start:decrement,
+    ::-webkit-scrollbar-button:end:increment {
+        display: block;
+        height: 10px;
+    }
+
+    ::-webkit-scrollbar-button:vertical:increment {
+        background-color: var(--v-theme-primary);
+    }
+
+    ::-webkit-scrollbar-track-piece {
+        background-color: var(--v-theme-on-primary);
+        -webkit-border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:vertical {
+        height: 50px;
+        background-color: var(--v-theme-on-primary);
+        -webkit-border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:horizontal {
+        width: 50px;
+        background-color: var(--v-theme-on-primary);
+        -webkit-border-radius: 3px;
+    }
+}
