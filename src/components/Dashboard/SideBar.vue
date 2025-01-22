@@ -29,9 +29,9 @@ const { access } = storeToRefs(useAccess);
 const useHeight = useHeightStore();
 const { height } = storeToRefs(useHeight);
 
-// const {
-//     dataLogout, logout, loadingLogout, errorLogout,
-// } = useAuth();
+const {
+    dataLogout, logout, loadingLogout, errorLogout,
+} = useAuth();
 
 onMounted(() => {
     authUserAuthenticate.value = JSON.parse(access?.value);
@@ -53,27 +53,37 @@ const navigateTo = (path) => {
     }
 }
 
-const logout = () => {
+const signOut = () => {
+    logout()
+}
+
+watch(dataLogout, (received) => {
     access.value = null
+
     $toast.open({
         message: "Cerro sesión correctamente",
         type: 'success',
     });
+
     router.push({ name: 'Login' })
-}
+})
 
-// watch(dataLogout, (received) => {
-//     access.value = null
-
-//     $toast.open({
-//         message: "Cerro sesión correctamente",
-//         type: 'success',
-//     });
-
-//     router.push({ name: 'Login' })
-// })
+watch(errorLogout, (received) => {
+    if (received) {
+        $toast.open({
+            message: received?.message,
+            type: 'error',
+        });
+        access.value = null
+    }
+})
 </script>
+
 <template>
+    <v-overlay :model-value="loadingLogout" :opacity="0.1" class="align-center justify-center">
+        <v-progress-circular color="primary" size="64" indeterminate></v-progress-circular>
+    </v-overlay>
+
     <v-navigation-drawer v-if="height < 500" v-model="drawer" rounded="lg" floating app :elevation="15" width="290"
         class="sidebar mx-5 my-5 mb-n10 pa-5">
 
@@ -81,8 +91,11 @@ const logout = () => {
             <h3 class="text-center mb-3">
                 {{ authUserAuthenticate?.data?.email }}
             </h3>
-            <v-btn block color="error" @click="logout">
+            <v-btn color="primary" class="rounded-pill" block @click="signOut" :loading="loadingLogout">
                 Cerrar Sesión
+                <template v-slot:loader>
+                    <v-progress-linear indeterminate></v-progress-linear>
+                </template>
             </v-btn>
         </div>
 

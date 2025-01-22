@@ -2,15 +2,10 @@
 import { onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
-import { useToast } from 'vue-toast-notification';
-import 'vue-toast-notification/dist/theme-sugar.css';
 
 import { useMenuStore } from "@/stores/menu.js";
 import { useHeightStore } from "@/stores/height.js";
-import { useAccessStore } from "@/stores/access.js";
-
-// Inicializar toast para notificaciones
-const $toast = useToast();
+import Profile from "@/components/Dashboard/Profile.vue";
 
 const router = useRouter();
 
@@ -23,30 +18,20 @@ const { drawer, menus } = storeToRefs(useMenu);
 const useHeight = useHeightStore();
 const { height } = storeToRefs(useHeight);
 
-// Store de accesos
-const useAccess = useAccessStore();
-const { access } = storeToRefs(useAccess);
-
-onMounted(() => {
-    authUserAuthenticate.value = JSON.parse(access?.value);
-});
-
-const authUserAuthenticate = ref(null);
-
 // Método para manejar el clic en un menú
-const navigateTo = (route) => {
-    router.push({ name: route });
-};
-
-const logout = () => {
-    access.value = null
-    $toast.open({
-        message: "Cerro sesión correctamente",
-        type: 'success',
-    });
-    router.push({ name: 'Login' })
+const navigateTo = (path) => {
+    if (router.hasRoute(path)) {
+        selectedMenu.value = path;
+        router.push({
+            name: path,
+        });
+    } else {
+        $toast.open({
+            message: "Ruta no encontrada",
+            type: 'error',
+        });
+    }
 }
-
 </script>
 
 <template>
@@ -56,20 +41,24 @@ const logout = () => {
         </v-app-bar-nav-icon>
 
         <!-- Barra de herramientas -->
-        <v-app-bar v-else :elevation="15" rounded="lg" height="160" class="app-bar">
-            <!-- Sección superior con usuario y botón de cerrar sesión -->
-            <div class="user-info">
-                <h3 class="user-name">{{ authUserAuthenticate?.data?.email }}</h3>
-                <v-btn color="error" class="logout-button" @click.prevent="logout">Cerrar Sesión</v-btn>
-            </div>
+        <v-app-bar v-else elevation="0" height="140" app>
+            <v-container class="d-flex justify-space-around align-center flex-row">
+                <!-- Sección izquierda -->
+                <div class="text-center mr-4">
+                    <v-btn v-if="menus.length > 0" v-for="(item, index) in menus" :key="index" color="primary"
+                        @click="navigateTo(item.route)" prepend-icon="mdi-open-in-new" size="small">
+                        <span>{{ item.nombre }}</span>
+                    </v-btn>
+                </div>
 
-            <!-- Navegación inferior -->
-            <v-bottom-navigation v-if="menus.length > 0" grow height="auto">
-                <v-btn v-for="(item, index) in menus" :key="index" value="item.nombre" @click="navigateTo(item.route)">
-                    <v-icon>{{ item.icon || "mdi-dots-horizontal" }}</v-icon>
-                    <span>{{ item.nombre }}</span>
-                </v-btn>
-            </v-bottom-navigation>
+                <v-spacer class="flex-grow-1"></v-spacer>
+
+                <!-- Sección derecha -->
+                <div class="d-flex flex-row justify-center align-center mr-5" v-if="height >= 500"
+                    :class="height >= 500 ? '' : 'mt-4'">
+                    <Profile />
+                </div>
+            </v-container>
         </v-app-bar>
     </div>
 </template>

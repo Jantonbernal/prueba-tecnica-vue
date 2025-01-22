@@ -25,7 +25,7 @@ export default function useAuth() {
     };
 
     const logout = async () => {
-        sendLogout('POST', 'site/logout')
+        sendLogout('POST', 'site/login')
     }
 
     return {
