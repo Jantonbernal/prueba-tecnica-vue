@@ -102,9 +102,16 @@ watch(errorLogout, (received) => {
         <v-list v-for="(item, index) in menus" :key="index" v-show="menus.length > 0" class="cursor-pointer pt-0">
             <v-list-group expand-icon>
                 <template v-slot:activator="{ props }">
-                    <v-list-item v-bind="props" :title="item.nombre" density="compact" rounded="lg"></v-list-item>
+                    <v-list-item v-bind="props" prepend-icon="mdi-open-in-new" :title="item.nombre" density="compact"
+                        rounded="lg"></v-list-item>
                 </template>
             </v-list-group>
         </v-list>
     </v-navigation-drawer>
 </template>
+
+<style>
+.v-list-item-title {
+    font-size: .8rem !important;
+}
+</style>
