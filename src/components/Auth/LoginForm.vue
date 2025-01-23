@@ -45,14 +45,27 @@ const signIn = async () => {
 };
 
 watch(dataLogin, (received) => {
-    access.value = received?.encrypted;
+    let verify = JSON.parse(received?.encrypted)
+    if (verify) {
+        console.log(verify.status);
+        if (verify?.status == 322) {
+            access.value = null;
+            if (received) {
+                $toast.open({
+                    message: verify?.message || "Ocurrió un error",
+                    type: "error",
+                });
+            }
+        } else {
+            access.value = received?.encrypted;
+            router.push({ name: "Home" });
+            $toast.open({
+                message: "Inicio de sesión exitoso",
+                type: "success",
+            });
+        }
+    }
 
-    $toast.open({
-        message: "Inicio de sesión exitoso",
-        type: "success",
-    });
-
-    router.push({ name: "Home" });
 });
 
 watch(errorLogin, (received) => {
