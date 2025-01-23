@@ -2,10 +2,15 @@
 import { onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
+import { useToast } from 'vue-toast-notification';
+import 'vue-toast-notification/dist/theme-sugar.css';
 
 import { useMenuStore } from "@/stores/menu.js";
 import { useHeightStore } from "@/stores/height.js";
 import Profile from "@/components/Dashboard/Profile.vue";
+
+// Inicializar toast para notificaciones
+const $toast = useToast();
 
 const router = useRouter();
 
@@ -21,7 +26,6 @@ const { height } = storeToRefs(useHeight);
 // Método para manejar el clic en un menú
 const navigateTo = (path) => {
     if (router.hasRoute(path)) {
-        selectedMenu.value = path;
         router.push({
             name: path,
         });
@@ -46,7 +50,7 @@ const navigateTo = (path) => {
                 <!-- Sección izquierda -->
                 <div class="text-center mr-4">
                     <v-btn v-if="menus.length > 0" v-for="(item, index) in menus" :key="index" color="primary"
-                        @click="navigateTo(item.route)" prepend-icon="mdi-open-in-new" size="small">
+                        @click="navigateTo(item.ruta)" prepend-icon="mdi-open-in-new" size="small">
                         <span>{{ item.nombre }}</span>
                     </v-btn>
                 </div>

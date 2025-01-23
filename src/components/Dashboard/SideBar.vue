@@ -41,7 +41,6 @@ const authUserAuthenticate = ref(null)
 
 const navigateTo = (path) => {
     if (router.hasRoute(path)) {
-        selectedMenu.value = path;
         router.push({
             name: path,
         });
@@ -71,7 +70,7 @@ watch(dataLogout, (received) => {
 watch(errorLogout, (received) => {
     if (received) {
         $toast.open({
-            message: received?.message,
+            message: "Cerro sesión correctamente",
             type: 'error',
         });
         access.value = null
@@ -102,8 +101,8 @@ watch(errorLogout, (received) => {
         <v-list v-for="(item, index) in menus" :key="index" v-show="menus.length > 0" class="cursor-pointer pt-0">
             <v-list-group expand-icon>
                 <template v-slot:activator="{ props }">
-                    <v-list-item v-bind="props" prepend-icon="mdi-open-in-new" :title="item.nombre" density="compact"
-                        rounded="lg"></v-list-item>
+                    <v-list-item v-bind="props" prepend-icon="mdi-open-in-new" :title="item.nombre"
+                        @click="navigateTo(item.ruta)" density="compact" rounded="lg"></v-list-item>
                 </template>
             </v-list-group>
         </v-list>

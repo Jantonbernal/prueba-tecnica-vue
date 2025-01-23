@@ -42,7 +42,7 @@ watch(dataLogout, (received) => {
 watch(errorLogout, (received) => {
     if (received) {
         $toast.open({
-            message: received?.message,
+            message: "Cerro sesión correctamente",
             type: 'error',
         });
         access.value = null
